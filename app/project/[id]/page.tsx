@@ -236,30 +236,30 @@ export default function ProjectPage({ params }: PageProps) {
   return (
     <>
       <div className="max-w-screen-xl mx-auto animate-fade-in">
-        <div className="mb-6">
-          <Link href="/" className="text-[10px] uppercase tracking-widest text-gray-400 hover:text-black transition-colors duration-300 inline-flex items-center gap-2 group">
+        <div className="mb-10">
+          <Link href="/" className="text-xs md:text-sm uppercase tracking-widest text-gray-400 hover:text-black transition-colors duration-300 inline-flex items-center gap-3 group">
             <span className="group-hover:-translate-x-1 transition-transform duration-300">&larr;</span>
             <span>Zurück zur Übersicht</span>
           </Link>
         </div>
 
-        <header className="mb-8 md:mb-10 max-w-3xl">
-          <h1 className="text-3xl md:text-4xl font-light mb-3 tracking-tight leading-[1.05]">{title}</h1>
-          <div className="space-y-1">
-            <div className="flex items-baseline gap-3 text-xs text-gray-400 uppercase tracking-wider font-light">
+        <header className="mb-12 md:mb-16 max-w-4xl">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-light mb-6 tracking-tight leading-[1.05]">{title}</h1>
+          <div className="space-y-3">
+            <div className="flex items-baseline gap-4 text-base md:text-lg text-gray-400 uppercase tracking-wider font-light">
               <span>{location}</span>
               <span className="text-gray-300">/</span>
               <span>{year}</span>
             </div>
             {collaboration && (
-              <p className="text-xs text-gray-400 italic mt-1 leading-relaxed max-w-2xl">
+              <p className="text-base md:text-lg text-gray-400 italic mt-2 leading-relaxed max-w-2xl">
                 {collaboration}
               </p>
             )}
           </div>
         </header>
 
-        <div className="space-y-12 md:space-y-16">
+        <div className="space-y-16 md:space-y-24">
           {/* Hauptbild */}
           <div className="relative aspect-[21/9] w-full bg-gray-50 overflow-hidden">
              <Image
@@ -272,10 +272,10 @@ export default function ProjectPage({ params }: PageProps) {
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             <div className="md:col-span-8">
-              <h3 className="text-lg md:text-xl font-light mb-4 tracking-tight">Projektbeschrieb</h3>
-              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed space-y-3 text-sm">
+              <h3 className="text-xl md:text-2xl font-light mb-6 tracking-tight">Projektbeschrieb</h3>
+              <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed space-y-5 text-lg md:text-xl">
                 <p>
                   Hier steht der ausführliche Projektbeschrieb. Er erläutert das Konzept, 
                   die städtebauliche Setzung und die architektonische Ausformulierung.
@@ -289,20 +289,20 @@ export default function ProjectPage({ params }: PageProps) {
               </div>
             </div>
             
-            <div className="md:col-span-4 space-y-4 text-xs md:text-sm">
-               <div className="grid grid-cols-2 gap-4 py-3 border-b border-gray-100">
+            <div className="md:col-span-4 space-y-6 text-base md:text-lg">
+               <div className="grid grid-cols-2 gap-6 py-4 border-b border-gray-100">
                  <span className="font-light text-gray-500">Bauherrschaft</span>
                  <span className="text-gray-700">Private Bauherrschaft</span>
                </div>
-               <div className="grid grid-cols-2 gap-4 py-3 border-b border-gray-100">
+               <div className="grid grid-cols-2 gap-6 py-4 border-b border-gray-100">
                  <span className="font-light text-gray-500">Architektur</span>
                  <span className="text-gray-700">Scheu Architekten</span>
                </div>
-               <div className="grid grid-cols-2 gap-4 py-3 border-b border-gray-100">
+               <div className="grid grid-cols-2 gap-6 py-4 border-b border-gray-100">
                  <span className="font-light text-gray-500">Bauleitung</span>
                  <span className="text-gray-700">Partnerfirma AG</span>
                </div>
-               <div className="grid grid-cols-2 gap-4 py-3">
+               <div className="grid grid-cols-2 gap-6 py-4">
                  <span className="font-light text-gray-500">Fertigstellung</span>
                  <span className="text-gray-700">{year.split('-')[1] || year}</span>
                </div>
@@ -311,14 +311,14 @@ export default function ProjectPage({ params }: PageProps) {
 
           {/* Galerie / Pläne - Thumbnail Grid */}
           {gallery.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="text-lg md:text-xl font-light tracking-tight">Pläne und Details</h3>
-              <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+            <div className="space-y-8">
+              <h3 className="text-xl md:text-2xl font-light tracking-tight">Pläne und Details</h3>
+              <div className="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {gallery.map((imgSrc, index) => (
                   <button
                     key={index}
                     onClick={() => openLightbox(imgSrc, `${title} Plan ${index + 1}`, index)}
-                    className="relative flex-shrink-0 w-48 h-32 md:w-64 md:h-40 bg-gray-50 overflow-hidden group cursor-pointer hover:opacity-90 transition-opacity duration-300 rounded-sm"
+                    className="relative flex-shrink-0 w-56 h-40 md:w-80 md:h-56 bg-gray-50 overflow-hidden group cursor-pointer hover:opacity-90 transition-opacity duration-300 rounded-sm"
                   >
                     <Image
                       src={imgSrc}

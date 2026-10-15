@@ -3,6 +3,7 @@ import { contact } from '@/lib/projects';
 
 export const metadata: Metadata = {
   title: 'Impressum',
+  alternates: { canonical: '/impressum' },
 };
 
 const sections = [
@@ -27,7 +28,7 @@ const sections = [
 export default function ImpressumPage() {
   return (
     <section className="px-5 pt-36 pb-24 md:px-10 md:pt-48 md:pb-40">
-      <h1 className="display text-[19vw] md:text-[12vw] -ml-[0.04em]">Impressum</h1>
+      <h1 className="display text-[15vw] md:text-[7vw] -ml-[0.03em]">Impressum</h1>
 
       <div className="mt-16 md:mt-24 grid grid-cols-12 gap-x-4 gap-y-12 text-[15px] leading-relaxed">
         <div className="col-span-12 md:col-span-3">
@@ -61,7 +62,7 @@ export default function ImpressumPage() {
           {sections.map((s) => (
             <div key={s.title} className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-2 border-b border-line py-6">
               <h2 className="font-medium">{s.title}</h2>
-              <p className="md:col-span-2 text-ink/75">{s.text}</p>
+              <p className="md:col-span-2">{s.text}</p>
             </div>
           ))}
         </div>

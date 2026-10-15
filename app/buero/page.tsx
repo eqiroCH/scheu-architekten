@@ -2,9 +2,11 @@ import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Reveal from '@/components/Reveal';
+import { contact } from '@/lib/projects';
 
 export const metadata: Metadata = {
   title: 'Büro',
+  alternates: { canonical: '/buero' },
   description: 'Scheu Architekten GmbH – Architekturbüro in Zürich, gegründet 2017 von Beat Scheu. Team, Werdegang und Kontakt.',
 };
 
@@ -32,63 +34,60 @@ export default function BueroPage() {
   return (
     <>
       {/* Kopf */}
-      <section className="px-5 pt-36 pb-20 md:px-10 md:pt-48 md:pb-32">
-        <p className="eyebrow text-stone mb-8 animate-fade">Büro — Zürich, seit 2017</p>
-        <h1 className="display text-[30vw] md:text-[24vw] -ml-[0.04em]">
+      <section className="px-5 pt-36 pb-20 md:px-10 md:pt-48 md:pb-28">
+        <p className="eyebrow text-stone mb-8 animate-fade">Büro, Zürich, seit 2017</p>
+        <h1 className="display text-[22vw] md:text-[12vw] -ml-[0.03em]">
           <span className="line-mask" style={{ '--delay': '150ms' } as CSSProperties}>
             <span>Büro</span>
           </span>
         </h1>
-        <div className="mt-16 md:mt-24 grid grid-cols-12 gap-4">
+        <div className="mt-14 md:mt-20 grid grid-cols-12 gap-4">
           <Reveal className="col-span-12 md:col-span-8 md:col-start-5">
-            <p className="text-[7.4vw] md:text-[3vw] leading-[1.05] tracking-[-0.04em] font-medium">
+            <p className="text-[7vw] md:text-[2.9vw] leading-[1.08] tracking-[-0.025em] font-medium [font-variation-settings:'wdth'_92] text-balance">
               Scheu Architekten ist ein Architekturbüro in Zürich, gegründet 2017 von Beat Scheu. Wir arbeiten an Aufgaben
-              unterschiedlicher Massstäbe – vom <em className="font-serif font-normal tracking-[-0.01em]">Möbel</em> bis zur{' '}
-              <em className="font-serif font-normal tracking-[-0.01em]">Schulanlage</em>.
+              unterschiedlicher Massstäbe, vom Möbel bis zur Schulanlage.
             </p>
           </Reveal>
-          <Reveal delay={150} className="col-span-12 md:col-span-4 md:col-start-5 mt-8 text-[17px] leading-relaxed text-ink/80">
+          <Reveal delay={150} className="col-span-12 md:col-span-4 md:col-start-5 mt-8 text-[17px] leading-relaxed">
             Unsere Architektur sucht nach spezifischen Lösungen für jeden Ort und jede Aufgabe. Dabei legen wir Wert auf eine
             sorgfältige Materialisierung und eine detailgerechte Ausführung.
           </Reveal>
-          <Reveal delay={250} className="col-span-12 md:col-span-4 md:mt-8 text-[17px] leading-relaxed text-ink/80">
+          <Reveal delay={250} className="col-span-12 md:col-span-4 md:mt-8 text-[17px] leading-relaxed">
             Ob im Umgang mit einem Baudenkmal in Graubünden oder bei der Erweiterung einer Schule: Wir verstehen den Bestand als
             Ausgangspunkt und das Handwerk als Massstab.
           </Reveal>
         </div>
       </section>
 
-      {/* Bildband */}
-      <section className="grid grid-cols-12 gap-4 px-5 md:px-10" aria-hidden>
-        <Reveal variant="clip" className="relative col-span-7 md:col-span-5 aspect-[4/5] overflow-hidden">
-          <Image src="/images/haus-am-hang.jpg" alt="" fill sizes="40vw" className="object-cover" />
+      {/* Bildband: Foto und Zeichnung */}
+      <section className="grid grid-cols-12 items-end gap-4 px-5 md:px-10" aria-hidden>
+        <Reveal variant="clip" className="relative col-span-7 md:col-span-5 aspect-[4/5] overflow-hidden bg-paper-deep">
+          <Image src="/images/haus-garcia.jpg" alt="" fill sizes="40vw" className="object-cover" />
         </Reveal>
-        <Reveal variant="clip" delay={150} className="relative col-span-5 md:col-span-4 md:col-start-8 mt-[30%] aspect-[3/4] overflow-hidden bg-[#f5f5f5]">
-          <Image src="/images/haus-am-hang-schnitt.jpg" alt="" fill sizes="33vw" className="object-contain mix-blend-multiply" />
+        <Reveal delay={150} className="relative col-span-5 md:col-span-5 md:col-start-8 aspect-[4/3]">
+          <Image src="/plans/haus-am-hang-schnitt.png" alt="" fill sizes="40vw" className="object-contain" />
         </Reveal>
       </section>
 
       {/* Beat Scheu */}
-      <section className="px-5 py-24 md:px-10 md:py-40">
+      <section className="px-5 py-24 md:px-10 md:py-36" aria-labelledby="gruender">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 md:col-span-4">
-            <p className="eyebrow text-stone">Gründer</p>
-            <h2 className="mt-4 text-[13vw] md:text-[5.6vw] leading-[0.9] font-medium tracking-[-0.05em]">
+            <p className="eyebrow text-stone">Gründer, Geschäftsführung</p>
+            <h2 id="gruender" className="display mt-4 text-[13vw] md:text-[5.6vw]">
               Beat
               <br />
               Scheu
             </h2>
-            <p className="mt-6 max-w-xs text-[17px] leading-relaxed text-ink/80">
-              Vom Möbelschreiner zum Architekten – das Wissen um Material und Fügung prägt die Arbeit des Büros bis heute.
+            <p className="mt-6 max-w-xs text-[17px] leading-relaxed">
+              Vom Möbelschreiner zum Architekten. Das Wissen um Material und Fügung prägt die Arbeit des Büros bis heute.
             </p>
           </div>
           <ol className="col-span-12 md:col-span-8 mt-10 md:mt-0 border-t border-ink">
             {timeline.map((t, i) => (
-              <Reveal as="li" key={t.year + t.text} delay={i * 60} className="group grid grid-cols-12 gap-4 border-b border-line py-5 md:py-6">
-                <span className="col-span-4 md:col-span-3 font-mono text-[12px] md:text-[13px] pt-1.5 text-stone transition-colors group-hover:text-accent">
-                  {t.year}
-                </span>
-                <span className="col-span-8 md:col-span-9 text-[19px] md:text-[clamp(1.1rem,1.7vw,1.7rem)] leading-tight tracking-[-0.025em]">
+              <Reveal as="li" key={t.year + t.text} delay={i * 60} className="grid grid-cols-12 gap-4 border-b border-line py-5 md:py-6">
+                <span className="eyebrow col-span-4 md:col-span-3 pt-1.5 text-stone">{t.year}</span>
+                <span className="col-span-8 md:col-span-9 text-[19px] md:text-[clamp(1.1rem,1.6vw,1.6rem)] leading-tight tracking-[-0.015em]">
                   {t.text}
                 </span>
               </Reveal>
@@ -98,31 +97,28 @@ export default function BueroPage() {
       </section>
 
       {/* Team */}
-      <section id="team" className="scroll-mt-24 bg-paper-deep px-5 py-24 md:px-10 md:py-40">
-        <div className="grid grid-cols-12 gap-4 mb-12 md:mb-20">
-          <h2 className="display col-span-12 md:col-span-6 text-[22vw] md:text-[11vw]">Team</h2>
-          <p className="col-span-12 md:col-span-4 md:col-start-9 self-end text-[17px] leading-snug text-ink/80">
-            Fünf Menschen mit Ausbildungen aus Fachhochschule, Hochschule und Berufslehre – gemeinsam an der Räffelstrasse in
+      <section id="team" className="bg-treppe px-5 py-24 md:px-10 md:py-36" aria-labelledby="team-titel">
+        <div className="grid grid-cols-12 gap-4 mb-12 md:mb-16">
+          <h2 id="team-titel" className="display col-span-12 md:col-span-6 text-[22vw] md:text-[10vw]">
+            Team
+          </h2>
+          <p className="col-span-12 md:col-span-4 md:col-start-9 self-end text-[17px] leading-snug">
+            Fünf Menschen mit Ausbildungen aus Fachhochschule, Hochschule und Berufslehre, gemeinsam an der Räffelstrasse in
             Zürich.
           </p>
         </div>
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 border-t border-ink">
-          {team.map((m, i) => (
-            <Reveal as="li" key={m.name} delay={(i % 3) * 100} className="group border-b border-line py-7 md:py-9">
-              <div className="flex items-baseline justify-between gap-4">
-                <span className="font-mono text-[11px] text-stone">{String(i + 1).padStart(2, '0')}</span>
-                {m.note && <span className="eyebrow text-accent">{m.note}</span>}
-              </div>
-              <p className="mt-6 text-[9vw] md:text-[2.6vw] leading-[0.95] font-medium tracking-[-0.045em] transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-1.5">
-                {m.name}
-              </p>
-              <p className="mt-3 text-[15px] text-ink/70">{m.role}</p>
+          {team.map((m) => (
+            <Reveal as="li" key={m.name} className="border-b border-ink/25 py-7 md:py-9">
+              <p className="eyebrow min-h-[1.4em]">{m.note}</p>
+              <p className="display mt-4 text-[9vw] md:text-[2.5vw]">{m.name}</p>
+              <p className="mt-3 text-[15px]">{m.role}</p>
             </Reveal>
           ))}
         </ul>
-        <div className="mt-16 grid grid-cols-12 gap-4">
-          <p className="eyebrow col-span-12 md:col-span-3 text-stone">Ehemalige</p>
-          <ul className="col-span-12 md:col-span-9 grid md:grid-cols-3 gap-2 text-[15px] text-ink/70">
+        <div className="mt-14 grid grid-cols-12 gap-4">
+          <h3 className="eyebrow col-span-12 md:col-span-3">Ehemalige</h3>
+          <ul className="col-span-12 md:col-span-9 grid md:grid-cols-3 gap-2 text-[15px]">
             {alumni.map((a) => (
               <li key={a}>{a}</li>
             ))}
@@ -130,19 +126,39 @@ export default function BueroPage() {
         </div>
       </section>
 
+      {/* Stellen */}
+      <section id="stellen" className="px-5 py-24 md:px-10 md:py-32 border-b border-ink" aria-labelledby="stellen-titel">
+        <div className="grid grid-cols-12 gap-4">
+          <h2 id="stellen-titel" className="eyebrow col-span-12 md:col-span-3 text-stone">
+            Stellen
+          </h2>
+          <div className="col-span-12 md:col-span-9">
+            <p className="text-[7vw] md:text-[2.9vw] leading-[1.08] tracking-[-0.025em] font-medium [font-variation-settings:'wdth'_92] text-balance">
+              Aktuell sind keine Stellen ausgeschrieben. Spontanbewerbungen nehmen wir gerne per E-Mail entgegen.
+            </p>
+            <a href={`mailto:${contact.email}?subject=Bewerbung`} className="group mt-8 inline-flex items-center gap-3 text-[17px] font-medium">
+              <span className="link-line">{contact.email}</span>
+              <span aria-hidden className="transition-transform group-hover:translate-x-1.5">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Nachweise */}
-      <section className="px-5 py-20 md:px-10 md:py-28">
+      <section className="px-5 py-20 md:px-10 md:py-28" aria-labelledby="nachweise">
         <div className="grid grid-cols-12 gap-x-4 gap-y-10 text-[15px] leading-relaxed">
-          <p className="eyebrow col-span-12 md:col-span-3 text-stone">Bildnachweis</p>
+          <h2 id="nachweise" className="eyebrow col-span-12 md:col-span-3 text-stone">
+            Bildnachweis
+          </h2>
           <div className="col-span-12 md:col-span-4">
             <p className="font-medium">Roman Keller</p>
-            <p className="text-ink/70">Neubau Haus am Hang, Klosters · Büroumbau Frauenzentrale, Zürich · Umbau Haus Garcia, Meisterschwanden</p>
+            <p className="text-stone">Neubau Haus am Hang, Klosters · Büroumbau Frauenzentrale, Zürich · Umbau Haus Garcia, Meisterschwanden</p>
           </div>
           <div className="col-span-12 md:col-span-4 md:col-start-9">
             <p className="font-medium">Studio Gataric Fotografie</p>
-            <p className="text-ink/70">Sanierung Haus Im Boden, Klosters-Monbiel</p>
+            <p className="text-stone">Sanierung Haus Im Boden, Klosters-Monbiel</p>
             <p className="mt-6 font-medium">Vermietung Haus Im Boden</p>
-            <a href="https://www.magnificasa.ch" target="_blank" rel="noopener noreferrer" className="link-line text-ink/70">
+            <a href="https://www.magnificasa.ch" target="_blank" rel="noopener noreferrer" className="link-line text-stone">
               Stiftung Ferien im Baudenkmal ↗
             </a>
           </div>

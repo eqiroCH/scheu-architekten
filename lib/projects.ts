@@ -20,6 +20,8 @@ export interface Project {
   status: 'realisiert' | 'in Ausführung';
   collaboration?: string;
   photography?: string;
+  /** Optionale Projektangaben – nur ausfüllen, wenn vom Büro bestätigt */
+  facts?: { label: string; value: string }[];
   lead: string;
   text: string[];
   cover: Media;
@@ -45,7 +47,7 @@ export const projects: Project[] = [
     ],
     cover: { src: '/images/gymnasium-thun.jpg', width: 2000, height: 1360, caption: 'Modell', kind: 'modell' },
     gallery: [
-      { src: '/images/gymnasium-thun-plan-1.jpg', width: 2811, height: 2536, caption: 'Situation, Erdgeschoss', kind: 'plan' },
+      { src: '/plans/gymnasium-thun-plan-1.png', width: 1600, height: 1443, caption: 'Situation, Erdgeschoss', kind: 'plan' },
       { src: '/images/gymnasium-thun-plan-eg.jpg', width: 2316, height: 1637, caption: 'Visualisierung Mensa', kind: 'visualisierung' },
     ],
   },
@@ -67,9 +69,9 @@ export const projects: Project[] = [
     ],
     cover: { src: '/images/haus-im-boden.jpg', width: 1600, height: 1066, caption: 'Aussenansicht', kind: 'foto' },
     gallery: [
-      { src: '/images/haus-im-boden-plan-eg.jpg', width: 2000, height: 2677, caption: 'Grundriss Erdgeschoss', kind: 'plan' },
-      { src: '/images/haus-im-boden-plan-og.jpg', width: 2000, height: 2678, caption: 'Grundriss Obergeschoss', kind: 'plan' },
-      { src: '/images/haus-im-boden-plan-dg.jpg', width: 2000, height: 2673, caption: 'Grundriss Dachgeschoss', kind: 'plan' },
+      { src: '/plans/haus-im-boden-plan-eg.png', width: 1600, height: 2142, caption: 'Grundriss Erdgeschoss', kind: 'plan' },
+      { src: '/plans/haus-im-boden-plan-og.png', width: 1600, height: 2142, caption: 'Grundriss Obergeschoss', kind: 'plan' },
+      { src: '/plans/haus-im-boden-plan-dg.png', width: 1600, height: 2138, caption: 'Grundriss Dachgeschoss', kind: 'plan' },
     ],
   },
   {
@@ -90,9 +92,9 @@ export const projects: Project[] = [
     ],
     cover: { src: '/images/haus-am-hang.jpg', width: 1800, height: 2250, caption: 'Eingang und Treppe', kind: 'foto' },
     gallery: [
-      { src: '/images/haus-am-hang-schnitt.jpg', width: 1800, height: 1369, caption: 'Schnitt', kind: 'plan' },
-      { src: '/images/haus-am-hang-plan-2og.jpg', width: 1800, height: 2105, caption: 'Grundriss 2. Obergeschoss', kind: 'plan' },
-      { src: '/images/haus-am-hang-plan-dg.jpg', width: 1800, height: 2106, caption: 'Grundriss Dachgeschoss', kind: 'plan' },
+      { src: '/plans/haus-am-hang-schnitt.png', width: 1600, height: 1217, caption: 'Schnitt', kind: 'plan' },
+      { src: '/plans/haus-am-hang-plan-2og.png', width: 1600, height: 1871, caption: 'Grundriss 2. Obergeschoss', kind: 'plan' },
+      { src: '/plans/haus-am-hang-plan-dg.png', width: 1600, height: 1872, caption: 'Grundriss Dachgeschoss', kind: 'plan' },
     ],
   },
   {
@@ -147,6 +149,9 @@ export type Kategorie = (typeof kategorien)[number];
 
 export interface Werk {
   title: string;
+  /** Jahr, in dem die Arbeit begann bzw. endete – für die Zeitleiste */
+  from: number;
+  to: number;
   location: string;
   years: string;
   kategorie: Kategorie;
@@ -156,23 +161,29 @@ export interface Werk {
 
 /** Vollständiges Werkverzeichnis, neueste zuerst */
 export const werkverzeichnis: Werk[] = [
-  { title: 'Erweiterung und Sanierung Gymnasium', location: 'Thun', years: '2020–2027', kategorie: 'Umbau & Sanierung', note: 'mit Stirnemann Architekten', slug: 'gymnasium-thun' },
-  { title: 'Umnutzung Stall zu Wohnung', location: 'Birmensdorf', years: '2022–2024', kategorie: 'Umbau & Sanierung' },
-  { title: 'Sanierung Haus Im Boden', location: 'Klosters-Monbiel', years: '2022–2023', kategorie: 'Umbau & Sanierung', slug: 'haus-im-boden' },
-  { title: 'Schulhausprovisorium Kantonsschule Wiedikon', location: 'Zürich', years: '2022', kategorie: 'Neubau' },
-  { title: 'Neubau Haus am Hang', location: 'Klosters', years: '2019–2022', kategorie: 'Neubau', slug: 'haus-am-hang' },
-  { title: 'Studie Neubau MFH', location: 'Birmensdorf', years: '2021', kategorie: 'Studie' },
-  { title: 'Büroumbau Frauenzentrale', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung', slug: 'frauenzentrale' },
-  { title: 'Sanierung WC-Anlagen Kantonsschule Rämibühl', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung' },
-  { title: 'Studie Sanierung MFH', location: 'Davos', years: '2020–2021', kategorie: 'Studie' },
-  { title: 'Umbau EFH', location: 'Wallisellen', years: '2019–2020', kategorie: 'Umbau & Sanierung' },
-  { title: 'Rahmenvereinbarung Baudenkmäler Kanton Zürich', location: 'Zürich', years: '2019', kategorie: 'Verfahren', note: 'Planerwahl im selektiven Verfahren' },
-  { title: 'Studie Sanierung MFH', location: 'Baden', years: '2019', kategorie: 'Studie', note: 'mit Stirnemann Architekten' },
-  { title: 'Studie Erweiterung TCS Campingplatz', location: 'St. Moritz', years: '2018', kategorie: 'Studie' },
-  { title: 'Studie Umbau und Aufstockung Baumeisterhaus', location: 'Zürich', years: '2018', kategorie: 'Studie' },
-  { title: 'Planerwahl Umbau Schulhaus', location: 'Zürich', years: '2018', kategorie: 'Verfahren' },
-  { title: 'Umbau Haus Garcia', location: 'Meisterschwanden', years: '2017–2019', kategorie: 'Umbau & Sanierung', slug: 'haus-garcia' },
+  { from: 2020, to: 2027, title: 'Erweiterung und Sanierung Gymnasium', location: 'Thun', years: '2020–2027', kategorie: 'Umbau & Sanierung', note: 'mit Stirnemann Architekten', slug: 'gymnasium-thun' },
+  { from: 2022, to: 2024, title: 'Umnutzung Stall zu Wohnung', location: 'Birmensdorf', years: '2022–2024', kategorie: 'Umbau & Sanierung' },
+  { from: 2022, to: 2023, title: 'Sanierung Haus Im Boden', location: 'Klosters-Monbiel', years: '2022–2023', kategorie: 'Umbau & Sanierung', slug: 'haus-im-boden' },
+  { from: 2022, to: 2022, title: 'Schulhausprovisorium Kantonsschule Wiedikon', location: 'Zürich', years: '2022', kategorie: 'Neubau' },
+  { from: 2019, to: 2022, title: 'Neubau Haus am Hang', location: 'Klosters', years: '2019–2022', kategorie: 'Neubau', slug: 'haus-am-hang' },
+  { from: 2021, to: 2021, title: 'Studie Neubau MFH', location: 'Birmensdorf', years: '2021', kategorie: 'Studie' },
+  { from: 2020, to: 2021, title: 'Büroumbau Frauenzentrale', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung', slug: 'frauenzentrale' },
+  { from: 2020, to: 2021, title: 'Sanierung WC-Anlagen Kantonsschule Rämibühl', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung' },
+  { from: 2020, to: 2021, title: 'Studie Sanierung MFH', location: 'Davos', years: '2020–2021', kategorie: 'Studie' },
+  { from: 2019, to: 2020, title: 'Umbau EFH', location: 'Wallisellen', years: '2019–2020', kategorie: 'Umbau & Sanierung' },
+  { from: 2019, to: 2019, title: 'Rahmenvereinbarung Baudenkmäler Kanton Zürich', location: 'Zürich', years: '2019', kategorie: 'Verfahren', note: 'Planerwahl im selektiven Verfahren' },
+  { from: 2019, to: 2019, title: 'Studie Sanierung MFH', location: 'Baden', years: '2019', kategorie: 'Studie', note: 'mit Stirnemann Architekten' },
+  { from: 2018, to: 2018, title: 'Studie Erweiterung TCS Campingplatz', location: 'St. Moritz', years: '2018', kategorie: 'Studie' },
+  { from: 2018, to: 2018, title: 'Studie Umbau und Aufstockung Baumeisterhaus', location: 'Zürich', years: '2018', kategorie: 'Studie' },
+  { from: 2018, to: 2018, title: 'Planerwahl Umbau Schulhaus', location: 'Zürich', years: '2018', kategorie: 'Verfahren' },
+  { from: 2017, to: 2019, title: 'Umbau Haus Garcia', location: 'Meisterschwanden', years: '2017–2019', kategorie: 'Umbau & Sanierung', slug: 'haus-garcia' },
 ];
+
+/** Laufend, solange das Endjahr noch nicht erreicht ist */
+export const isOngoing = (w: Werk, year = new Date().getFullYear()) => w.to >= year;
+
+export const TIMELINE_START = 2017;
+export const TIMELINE_END = 2027;
 
 export const allPlans = projects.flatMap((p) =>
   p.gallery.filter((m) => m.kind === 'plan').map((m) => ({ ...m, project: p })),

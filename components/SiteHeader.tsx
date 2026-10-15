@@ -2,58 +2,144 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { contact } from '@/lib/projects';
 
 const links = [
-  { href: '/#projekte', label: 'Projekte' },
-  { href: '/#werkverzeichnis', label: 'Werkverzeichnis' },
-  { href: '/buero', label: 'Büro' },
-  { href: '#kontakt', label: 'Kontakt' },
+  { href: '/#projekte', label: 'Projekte', id: 'projekte' },
+  { href: '/#werkverzeichnis', label: 'Werkverzeichnis', id: 'werkverzeichnis' },
+  { href: '/buero', label: 'Büro', id: 'buero' },
+  { href: '#kontakt', label: 'Kontakt', id: 'kontakt' },
 ];
+
+/**
+ * Über einem Bild-Kopf (`data-header="light" | "split"`) liegt die Navigation frei und weiss,
+ * danach als ruhige Papierleiste, die beim Runterscrollen ausweicht.
+ */
+type Mode = 'solid' | 'light' | 'split';
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<Mode>('solid');
+  const [hidden, setHidden] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
+  // Modus + Ein-/Ausblenden
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
+    let lastY = window.scrollY;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const hero = document.querySelector<HTMLElement>('[data-header]');
+      const overHero = hero ? hero.getBoundingClientRect().bottom > 72 : false;
+      setMode(overHero ? ((hero!.dataset.header as Mode) ?? 'light') : 'solid');
+      if (overHero || y < lastY - 4) setHidden(false);
+      else if (y > 320 && y > lastY + 4) setHidden(true);
+      lastY = y;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    raf = requestAnimationFrame(update);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [pathname]);
+
+  // Aktiver Abschnitt
+  useEffect(() => {
+    const targets = ['projekte', 'werkverzeichnis', 'kontakt']
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+          else setActive((a) => (a === e.target.id ? null : a));
+        });
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    targets.forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, [pathname]);
+
+  // Mobile Menü: Scroll sperren, Escape, Fokus
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = 'hidden';
+    firstLinkRef.current?.focus();
+    const trigger = triggerRef.current;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+      trigger?.focus();
+    };
   }, [open]);
+
+  const isActive = (id: string) => (id === 'buero' ? pathname === '/buero' : pathname === '/' && active === id);
+
+  const solid = mode === 'solid';
+  const shell = solid
+    ? 'bg-paper/92 backdrop-blur-md text-ink border-b border-ink/10'
+    : 'bg-gradient-to-b from-black/30 to-transparent md:from-transparent text-white';
+  const logoTone = mode === 'split' ? 'md:text-ink' : '';
+  const metaTone = mode === 'split' ? 'md:text-ink' : '';
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 mix-blend-difference text-white">
-        <div className="grid grid-cols-12 items-start gap-4 px-5 py-5 md:px-10 md:py-7">
-          <Link href="/" className="col-span-6 md:col-span-3 block leading-[0.95] text-[15px] md:text-[17px] font-medium tracking-[-0.03em]" aria-label="Scheu Architekten – Startseite">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${shell} ${
+          hidden && !open ? '-translate-y-full' : 'translate-y-0'
+        }`}
+      >
+        <div className={`grid grid-cols-12 items-start gap-4 px-5 md:px-10 transition-[padding] duration-500 ${solid ? 'py-4' : 'py-5 md:py-7'}`}>
+          <Link
+            href="/"
+            className={`col-span-6 md:col-span-3 block leading-[0.95] text-[16px] md:text-[17px] font-semibold tracking-[-0.02em] [font-variation-settings:'wdth'_92] ${logoTone}`}
+            aria-label="Scheu Architekten – Startseite"
+          >
             <span className="block">Scheu</span>
             <span className="block">Architekten</span>
           </Link>
 
-          <p className="eyebrow hidden md:block col-span-3 pt-0.5 opacity-70">
+          <p className={`eyebrow hidden lg:block col-span-3 pt-0.5 ${metaTone}`}>
             Architekturbüro
             <br />
             Zürich, seit 2017
           </p>
 
-          <nav className="hidden md:flex col-span-6 justify-end gap-8 lg:gap-12 pt-0.5" aria-label="Hauptnavigation">
-            {links.map((l, i) => {
-              const active = l.href === pathname;
+          <nav className="hidden md:flex col-span-9 lg:col-span-6 justify-end gap-8 lg:gap-10 pt-0.5" aria-label="Hauptnavigation">
+            {links.map((l) => {
+              const on = isActive(l.id);
               return (
-                <Link key={l.href} href={l.href} className="group flex items-start gap-1.5 text-[15px] tracking-[-0.01em]">
-                  <span className="font-mono text-[10px] opacity-50 pt-0.5">0{i + 1}</span>
-                  <span className={`link-line ${active ? 'bg-[length:100%_1px]' : ''}`}>{l.label}</span>
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  aria-current={on ? (l.id === 'buero' ? 'page' : 'location') : undefined}
+                  className="group relative text-[15px] font-medium tracking-[-0.005em]"
+                >
+                  <span className={`link-line ${on ? '!bg-[length:100%_1px]' : ''}`}>{l.label}</span>
                 </Link>
               );
             })}
           </nav>
 
           <button
+            ref={triggerRef}
             type="button"
             onClick={() => setOpen(true)}
-            className="md:hidden col-span-6 justify-self-end flex items-center gap-3 text-[15px]"
+            className="md:hidden col-span-6 justify-self-end -my-3 -mr-3 flex items-center gap-3 px-3 py-3 text-[15px] font-medium"
             aria-expanded={open}
             aria-controls="mobile-menu"
           >
@@ -69,18 +155,21 @@ export default function SiteHeader() {
       {/* Mobile Menü */}
       <div
         id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menü"
+        inert={!open}
         className={`fixed inset-0 z-[70] bg-ink text-paper flex flex-col px-5 py-5 transition-[clip-path] duration-700 ease-[cubic-bezier(.77,0,.18,1)] md:hidden ${
-          open ? '[clip-path:inset(0_0_0_0)]' : '[clip-path:inset(0_0_100%_0)] pointer-events-none'
+          open ? '[clip-path:inset(0_0_0_0)]' : '[clip-path:inset(0_0_100%_0)]'
         }`}
-        aria-hidden={!open}
       >
         <div className="flex justify-between items-start">
-          <span className="leading-[0.95] text-[15px] font-medium tracking-[-0.03em]">
+          <Link href="/" onClick={() => setOpen(false)} className="leading-[0.95] text-[16px] font-semibold tracking-[-0.02em]">
             Scheu
             <br />
             Architekten
-          </span>
-          <button type="button" onClick={() => setOpen(false)} className="text-[15px] flex items-center gap-3">
+          </Link>
+          <button type="button" onClick={() => setOpen(false)} className="-my-3 -mr-3 px-3 py-3 text-[15px] font-medium flex items-center gap-3">
             Schliessen
             <span className="relative block h-4 w-4" aria-hidden>
               <span className="absolute top-1/2 left-0 h-px w-4 bg-current rotate-45" />
@@ -93,19 +182,19 @@ export default function SiteHeader() {
           {links.map((l, i) => (
             <Link
               key={l.href}
+              ref={i === 0 ? firstLinkRef : undefined}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="flex items-start gap-3 border-b border-white/15 py-3"
+              className="border-b border-white/15 py-3 display text-[12vw]"
             >
-              <span className="font-mono text-[11px] text-stone pt-2">0{i + 1}</span>
-              <span className="text-[11vw] leading-[0.95] font-medium tracking-[-0.05em]">{l.label}</span>
+              {l.label}
             </Link>
           ))}
         </nav>
 
-        <div className="eyebrow text-stone flex justify-between">
-          <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          <a href={contact.phoneHref}>{contact.phone}</a>
+        <div className="eyebrow text-paper/70 flex flex-col gap-1">
+          <span className="select-all">{contact.email}</span>
+          <span>{contact.phone}</span>
         </div>
       </div>
     </>

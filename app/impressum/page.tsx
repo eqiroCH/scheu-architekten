@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { contact } from '@/lib/projects';
+import { projects } from '@/lib/projects';
+import { contact } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Impressum',
@@ -25,14 +26,22 @@ const sections = [
   },
 ];
 
+/** Bildnachweis direkt aus den Projektdaten: Fotograf/in → Projekte */
+const credits = Object.entries(
+  projects.reduce<Record<string, string[]>>((acc, p) => {
+    if (p.photography) (acc[p.photography] ??= []).push(`${p.title}, ${p.location}`);
+    return acc;
+  }, {}),
+);
+
 export default function ImpressumPage() {
   return (
-    <section className="px-5 pt-36 pb-24 md:px-10 md:pt-48 md:pb-40">
-      <h1 className="display text-[15vw] md:text-[7vw] -ml-[0.03em]">Impressum</h1>
+    <section className="wrap pb-20 pt-12 md:pb-32 md:pt-20">
+      <h1 className="display text-heading">Impressum</h1>
 
-      <div className="mt-16 md:mt-24 grid grid-cols-12 gap-x-4 gap-y-12 text-[15px] leading-relaxed">
-        <div className="col-span-12 md:col-span-3">
-          <p className="eyebrow text-stone mb-3">Firma</p>
+      <div className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-3 md:mt-16 md:grid-cols-12">
+        <div className="md:col-span-3">
+          <h2 className="mb-2 text-small text-stone">Firma</h2>
           <address className="not-italic">
             {contact.company}
             <br />
@@ -43,8 +52,8 @@ export default function ImpressumPage() {
             Schweiz
           </address>
         </div>
-        <div className="col-span-6 md:col-span-3">
-          <p className="eyebrow text-stone mb-3">Kontakt</p>
+        <div className="md:col-span-3">
+          <h2 className="mb-2 text-small text-stone">Kontakt</h2>
           <a href={`mailto:${contact.email}`} className="link-line">
             {contact.email}
           </a>
@@ -53,18 +62,29 @@ export default function ImpressumPage() {
             {contact.phone}
           </a>
         </div>
-        <div className="col-span-6 md:col-span-3">
-          <p className="eyebrow text-stone mb-3">Geschäftsführung</p>
+        <div className="md:col-span-3">
+          <h2 className="mb-2 text-small text-stone">Geschäftsführung</h2>
           <p>Beat Scheu, Dipl. Architekt FH</p>
         </div>
+      </div>
 
-        <div className="col-span-12 md:col-span-9 md:col-start-4 border-t border-ink">
-          {sections.map((s) => (
-            <div key={s.title} className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-2 border-b border-line py-6">
-              <h2 className="font-medium">{s.title}</h2>
-              <p className="md:col-span-2">{s.text}</p>
-            </div>
-          ))}
+      <div className="mt-16 border-t border-ink md:mt-24">
+        {sections.map((s) => (
+          <div key={s.title} className="grid gap-x-8 gap-y-2 border-b border-line py-6 md:grid-cols-12">
+            <h2 className="font-medium md:col-span-3">{s.title}</h2>
+            <p className="max-w-[65ch] md:col-span-9">{s.text}</p>
+          </div>
+        ))}
+        <div className="grid gap-x-8 gap-y-2 border-b border-line py-6 md:grid-cols-12">
+          <h2 className="font-medium md:col-span-3">Bildnachweis</h2>
+          <dl className="space-y-3 md:col-span-9">
+            {credits.map(([photographer, list]) => (
+              <div key={photographer}>
+                <dt>{photographer}</dt>
+                <dd className="text-small text-stone">{list.join(' · ')}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

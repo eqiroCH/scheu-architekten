@@ -1,17 +1,10 @@
 'use client';
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 
-interface RevealProps {
-  children: ReactNode;
-  variant?: 'up' | 'clip';
-  delay?: number;
-  className?: string;
-  as?: 'div' | 'section' | 'li' | 'figure' | 'p' | 'span';
-}
-
-export default function Reveal({ children, variant = 'up', delay = 0, className, as: Tag = 'div' }: RevealProps) {
-  const ref = useRef<HTMLElement>(null);
+/** Blendet Bilder beim Hereinscrollen sanft ein. Ohne JavaScript ist alles sofort sichtbar. */
+export default function Reveal({ children, className }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -23,21 +16,15 @@ export default function Reveal({ children, variant = 'up', delay = 0, className,
           io.disconnect();
         }
       },
-      { rootMargin: '0px 0px -12% 0px' },
+      { rootMargin: '0px 0px -8% 0px' },
     );
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   return (
-    <Tag
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ref={ref as any}
-      data-reveal={variant}
-      className={className}
-      style={{ '--delay': `${delay}ms` } as CSSProperties}
-    >
+    <div ref={ref} data-reveal className={className}>
       {children}
-    </Tag>
+    </div>
   );
 }

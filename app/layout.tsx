@@ -1,23 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Newsreader } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
-import { baseOpenGraph, siteUrl } from "@/lib/site";
-import { contact } from "@/lib/projects";
+import { baseOpenGraph, contact, siteUrl } from "@/lib/site";
 
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
   axes: ["wdth"],
-  display: "swap",
-});
-
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
-  style: ["italic"],
-  weight: ["300"],
   display: "swap",
 });
 
@@ -68,11 +59,11 @@ export default function RootLayout({
   return (
     <html lang="de-CH" suppressHydrationWarning>
       <head>
-        {/* Reveal-Animationen nur mit JavaScript – ohne JS ist alles sofort sichtbar */}
+        {/* Bilder blenden nur mit JavaScript ein – ohne JS ist alles sofort sichtbar */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
       </head>
-      <body className={`${archivo.variable} ${newsreader.variable} min-h-screen flex flex-col`}>
+      <body className={`${archivo.variable} flex min-h-screen flex-col`}>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-3 focus:text-paper"

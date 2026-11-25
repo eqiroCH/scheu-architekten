@@ -20,8 +20,8 @@ export interface Project {
   status: 'realisiert' | 'in Ausführung';
   collaboration?: string;
   photography?: string;
-  /** Optionale Projektangaben – nur ausfüllen, wenn vom Büro bestätigt */
-  facts?: { label: string; value: string }[];
+  /** Optionale Projektangaben – nur ausfüllen, wenn vom Büro bestätigt. Mit `href` wird der Wert ein Link. */
+  facts?: { label: string; value: string; href?: string }[];
   lead: string;
   text: string[];
   cover: Media;
@@ -48,7 +48,7 @@ export const projects: Project[] = [
     cover: { src: '/images/gymnasium-thun.jpg', width: 2000, height: 1360, caption: 'Modell', kind: 'modell' },
     gallery: [
       { src: '/plans/gymnasium-thun-plan-1.png', width: 1600, height: 1443, caption: 'Situation, Erdgeschoss', kind: 'plan' },
-      { src: '/images/gymnasium-thun-plan-eg.jpg', width: 2316, height: 1637, caption: 'Visualisierung Mensa', kind: 'visualisierung' },
+      { src: '/images/gymnasium-thun-mensa.jpg', width: 2316, height: 1637, caption: 'Visualisierung Mensa', kind: 'visualisierung' },
     ],
   },
   {
@@ -61,6 +61,7 @@ export const projects: Project[] = [
     years: '2022–2023',
     status: 'realisiert',
     photography: 'Studio Gataric Fotografie',
+    facts: [{ label: 'Vermietung', value: 'Stiftung Ferien im Baudenkmal', href: 'https://www.magnificasa.ch' }],
     lead:
       'Ein historisches Wohnhaus im Prättigau, sorgfältig saniert und heute als Ferienhaus der Stiftung Ferien im Baudenkmal zugänglich.',
     text: [
@@ -144,57 +145,41 @@ export function getNextProject(slug: string) {
   return projects[(i + 1) % projects.length];
 }
 
-export const kategorien = ['Umbau & Sanierung', 'Neubau', 'Studie', 'Verfahren'] as const;
-export type Kategorie = (typeof kategorien)[number];
+export type Kategorie = 'Umbau & Sanierung' | 'Neubau' | 'Studie' | 'Verfahren';
 
 export interface Werk {
   title: string;
-  /** Jahr, in dem die Arbeit begann bzw. endete – für die Zeitleiste */
-  from: number;
-  to: number;
   location: string;
   years: string;
   kategorie: Kategorie;
   note?: string;
+  /** Nur bei Projekten mit eigener Seite */
   slug?: string;
+}
+
+/** Eintrag für ein Projekt mit eigener Seite: Titel, Ort und Jahre kommen aus `projects` */
+function mitSeite(slug: string, kategorie: Kategorie, note?: string): Werk {
+  const p = getProject(slug);
+  if (!p) throw new Error(`Werkverzeichnis: Projekt «${slug}» fehlt in projects`);
+  return { title: p.title, location: p.location, years: p.years, kategorie, note, slug };
 }
 
 /** Vollständiges Werkverzeichnis, neueste zuerst */
 export const werkverzeichnis: Werk[] = [
-  { from: 2020, to: 2027, title: 'Erweiterung und Sanierung Gymnasium', location: 'Thun', years: '2020–2027', kategorie: 'Umbau & Sanierung', note: 'mit Stirnemann Architekten', slug: 'gymnasium-thun' },
-  { from: 2022, to: 2024, title: 'Umnutzung Stall zu Wohnung', location: 'Birmensdorf', years: '2022–2024', kategorie: 'Umbau & Sanierung' },
-  { from: 2022, to: 2023, title: 'Sanierung Haus Im Boden', location: 'Klosters-Monbiel', years: '2022–2023', kategorie: 'Umbau & Sanierung', slug: 'haus-im-boden' },
-  { from: 2022, to: 2022, title: 'Schulhausprovisorium Kantonsschule Wiedikon', location: 'Zürich', years: '2022', kategorie: 'Neubau' },
-  { from: 2019, to: 2022, title: 'Neubau Haus am Hang', location: 'Klosters', years: '2019–2022', kategorie: 'Neubau', slug: 'haus-am-hang' },
-  { from: 2021, to: 2021, title: 'Studie Neubau MFH', location: 'Birmensdorf', years: '2021', kategorie: 'Studie' },
-  { from: 2020, to: 2021, title: 'Büroumbau Frauenzentrale', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung', slug: 'frauenzentrale' },
-  { from: 2020, to: 2021, title: 'Sanierung WC-Anlagen Kantonsschule Rämibühl', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung' },
-  { from: 2020, to: 2021, title: 'Studie Sanierung MFH', location: 'Davos', years: '2020–2021', kategorie: 'Studie' },
-  { from: 2019, to: 2020, title: 'Umbau EFH', location: 'Wallisellen', years: '2019–2020', kategorie: 'Umbau & Sanierung' },
-  { from: 2019, to: 2019, title: 'Rahmenvereinbarung Baudenkmäler Kanton Zürich', location: 'Zürich', years: '2019', kategorie: 'Verfahren', note: 'Planerwahl im selektiven Verfahren' },
-  { from: 2019, to: 2019, title: 'Studie Sanierung MFH', location: 'Baden', years: '2019', kategorie: 'Studie', note: 'mit Stirnemann Architekten' },
-  { from: 2018, to: 2018, title: 'Studie Erweiterung TCS Campingplatz', location: 'St. Moritz', years: '2018', kategorie: 'Studie' },
-  { from: 2018, to: 2018, title: 'Studie Umbau und Aufstockung Baumeisterhaus', location: 'Zürich', years: '2018', kategorie: 'Studie' },
-  { from: 2018, to: 2018, title: 'Planerwahl Umbau Schulhaus', location: 'Zürich', years: '2018', kategorie: 'Verfahren' },
-  { from: 2017, to: 2019, title: 'Umbau Haus Garcia', location: 'Meisterschwanden', years: '2017–2019', kategorie: 'Umbau & Sanierung', slug: 'haus-garcia' },
+  mitSeite('gymnasium-thun', 'Umbau & Sanierung', 'mit Stirnemann Architekten'),
+  { title: 'Umnutzung Stall zu Wohnung', location: 'Birmensdorf', years: '2022–2024', kategorie: 'Umbau & Sanierung' },
+  mitSeite('haus-im-boden', 'Umbau & Sanierung'),
+  { title: 'Schulhausprovisorium Kantonsschule Wiedikon', location: 'Zürich', years: '2022', kategorie: 'Neubau' },
+  mitSeite('haus-am-hang', 'Neubau'),
+  { title: 'Studie Neubau MFH', location: 'Birmensdorf', years: '2021', kategorie: 'Studie' },
+  mitSeite('frauenzentrale', 'Umbau & Sanierung'),
+  { title: 'Sanierung WC-Anlagen Kantonsschule Rämibühl', location: 'Zürich', years: '2020–2021', kategorie: 'Umbau & Sanierung' },
+  { title: 'Studie Sanierung MFH', location: 'Davos', years: '2020–2021', kategorie: 'Studie' },
+  { title: 'Umbau EFH', location: 'Wallisellen', years: '2019–2020', kategorie: 'Umbau & Sanierung' },
+  { title: 'Rahmenvereinbarung Baudenkmäler Kanton Zürich', location: 'Zürich', years: '2019', kategorie: 'Verfahren', note: 'Planerwahl im selektiven Verfahren' },
+  { title: 'Studie Sanierung MFH', location: 'Baden', years: '2019', kategorie: 'Studie', note: 'mit Stirnemann Architekten' },
+  { title: 'Studie Erweiterung TCS Campingplatz', location: 'St. Moritz', years: '2018', kategorie: 'Studie' },
+  { title: 'Studie Umbau und Aufstockung Baumeisterhaus', location: 'Zürich', years: '2018', kategorie: 'Studie' },
+  { title: 'Planerwahl Umbau Schulhaus', location: 'Zürich', years: '2018', kategorie: 'Verfahren' },
+  mitSeite('haus-garcia', 'Umbau & Sanierung'),
 ];
-
-/** Laufend, solange das Endjahr noch nicht erreicht ist */
-export const isOngoing = (w: Werk, year = new Date().getFullYear()) => w.to >= year;
-
-export const TIMELINE_START = 2017;
-export const TIMELINE_END = 2027;
-
-export const allPlans = projects.flatMap((p) =>
-  p.gallery.filter((m) => m.kind === 'plan').map((m) => ({ ...m, project: p })),
-);
-
-export const contact = {
-  company: 'Scheu Architekten GmbH',
-  street: 'Räffelstrasse 11',
-  city: '8045 Zürich',
-  email: 'info@scheuarchitekten.ch',
-  phone: '+41 44 552 88 90',
-  phoneHref: 'tel:+41445528890',
-  maps: 'https://www.google.com/maps/search/?api=1&query=R%C3%A4ffelstrasse+11,+8045+Z%C3%BCrich',
-};

@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Scheu Architekten – Website
 
-## Getting Started
-
-First, run the development server:
+Next.js (App Router) mit Tailwind CSS 4. Wird bei jedem Push auf `main` automatisch über Netlify veröffentlicht; Pull Requests bekommen eine Vorschau-URL.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # Produktions-Build prüfen
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Inhalte pflegen
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Alle Inhalte stehen in zwei Dateien:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `lib/projects.ts` – Projekte mit eigener Seite und das Werkverzeichnis
+- `lib/site.ts` – Adresse, Telefon, E-Mail, Domain
 
-## Learn More
+### Neues Projekt mit eigener Seite
 
-To learn more about Next.js, take a look at the following resources:
+1. Titelbild nach `public/images/<slug>.jpg` legen (mind. 2400 px an der langen Seite).
+   Pläne als PNG mit transparentem Hintergrund nach `public/plans/<slug>-….png`.
+2. In `lib/projects.ts` einen Eintrag in `projects` ergänzen (Reihenfolge = Reihenfolge auf der Startseite;
+   das erste Projekt erscheint gross über die ganze Breite).
+3. Im `werkverzeichnis` an der richtigen Stelle `mitSeite('<slug>', '<Kategorie>')` einfügen –
+   Titel, Ort und Jahre werden aus dem Projekt übernommen.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Raster, Projektseite, Sitemap und Bildnachweis (Impressum) passen sich automatisch an.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Arbeit ohne eigene Seite
 
-## Deploy on Vercel
+Nur eine Zeile im `werkverzeichnis` ergänzen (`title`, `location`, `years`, `kategorie`, optional `note`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Gestaltung
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Farben: Papier `#efece6`, Tusche `#121212`, Grau `#66625b`, Linie `#cfcac0`; Rot `#b8231c` nur für «In Ausführung».
+- Schrift: Archivo (variable Breite). Sechs Grössen, definiert in `app/globals.css`:
+  `text-label`, `text-small`, `text-body`, `text-lead`, `text-heading`, `text-display` (nur Wortmarke).
+- Satzspiegel: Klasse `wrap` (max. 1680 px, Rand 20/40 px).
+- Bewegung: nur ein sanftes Einblenden der Bilder (`components/Reveal.tsx`) und die Unterstreichung bei Hover.
+
+Teilen-Bild (`app/opengraph-image.jpg`) und Favicon (`app/icon.png`, `app/apple-icon.png`) sind statische Dateien.
+`public/image-removebg-preview.png` ist das ursprüngliche Logo des Büros (Referenz, wird nicht verwendet).

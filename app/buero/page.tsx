@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
-import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Reveal from '@/components/Reveal';
-import { contact } from '@/lib/projects';
+import { contact } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Büro',
   alternates: { canonical: '/buero' },
-  description: 'Scheu Architekten GmbH – Architekturbüro in Zürich, gegründet 2017 von Beat Scheu. Team, Werdegang und Kontakt.',
+  description: 'Scheu Architekten GmbH – Architekturbüro in Zürich, gegründet 2017 von Beat Scheu. Werdegang, Team und Stellen.',
 };
 
 const timeline = [
@@ -21,7 +20,6 @@ const timeline = [
 ];
 
 const team = [
-  { name: 'Beat Scheu', role: 'Dipl. Architekt FH', note: 'Gründer, Geschäftsführung' },
   { name: 'Christina Sulzer', role: 'Dipl. Architektin ETH' },
   { name: 'Lisa Colombo', role: 'Dipl. Architektin TU' },
   { name: 'Felix Simons', role: 'Dipl. Ing. TU' },
@@ -34,134 +32,84 @@ export default function BueroPage() {
   return (
     <>
       {/* Kopf */}
-      <section className="px-5 pt-36 pb-20 md:px-10 md:pt-48 md:pb-28">
-        <p className="eyebrow text-stone mb-8 animate-fade">Büro, Zürich, seit 2017</p>
-        <h1 className="display text-[22vw] md:text-[12vw] -ml-[0.03em]">
-          <span className="line-mask" style={{ '--delay': '150ms' } as CSSProperties}>
-            <span>Büro</span>
-          </span>
-        </h1>
-        <div className="mt-14 md:mt-20 grid grid-cols-12 gap-4">
-          <Reveal className="col-span-12 md:col-span-8 md:col-start-5">
-            <p className="text-[7vw] md:text-[2.9vw] leading-[1.08] tracking-[-0.025em] font-medium [font-variation-settings:'wdth'_92] text-balance">
-              Scheu Architekten ist ein Architekturbüro in Zürich, gegründet 2017 von Beat Scheu. Wir arbeiten an Aufgaben
-              unterschiedlicher Massstäbe, vom Möbel bis zur Schulanlage.
-            </p>
-          </Reveal>
-          <Reveal delay={150} className="col-span-12 md:col-span-4 md:col-start-5 mt-8 text-[17px] leading-relaxed">
-            Unsere Architektur sucht nach spezifischen Lösungen für jeden Ort und jede Aufgabe. Dabei legen wir Wert auf eine
-            sorgfältige Materialisierung und eine detailgerechte Ausführung.
-          </Reveal>
-          <Reveal delay={250} className="col-span-12 md:col-span-4 md:mt-8 text-[17px] leading-relaxed">
-            Ob im Umgang mit einem Baudenkmal in Graubünden oder bei der Erweiterung einer Schule: Wir verstehen den Bestand als
+      <section className="wrap grid gap-y-8 pb-16 pt-12 md:grid-cols-12 md:gap-x-8 md:pb-24 md:pt-20">
+        <h1 className="display text-heading md:col-span-4">Büro</h1>
+        <div className="md:col-span-8 lg:col-span-7">
+          <p className="text-lead font-medium tracking-[-0.015em] text-balance">
+            Scheu Architekten ist ein Architekturbüro in Zürich, gegründet 2017 von Beat Scheu. Wir arbeiten an Aufgaben
+            unterschiedlicher Massstäbe, vom Möbel bis zur Schulanlage.
+          </p>
+          <p className="mt-8 max-w-[65ch]">
+            Dabei legen wir Wert auf eine sorgfältige Materialisierung und eine detailgerechte Ausführung. Ob im Umgang mit
+            einem Baudenkmal in Graubünden oder bei der Erweiterung einer Schule: Wir verstehen den Bestand als
             Ausgangspunkt und das Handwerk als Massstab.
-          </Reveal>
+          </p>
         </div>
       </section>
 
-      {/* Bildband: Foto und Zeichnung */}
-      <section className="grid grid-cols-12 items-end gap-4 px-5 md:px-10" aria-hidden>
-        <Reveal variant="clip" className="relative col-span-7 md:col-span-5 aspect-[4/5] overflow-hidden bg-paper-deep">
-          <Image src="/images/haus-garcia.jpg" alt="" fill sizes="40vw" className="object-cover" />
+      {/* Foto und Zeichnung */}
+      <section className="wrap grid grid-cols-12 items-end gap-4 md:gap-8" aria-hidden>
+        <Reveal className="relative col-span-7 aspect-[4/5] overflow-hidden bg-paper-deep md:col-span-5">
+          <Image src="/images/haus-garcia.jpg" alt="" fill sizes="(max-width: 768px) 58vw, 40vw" className="object-cover" />
         </Reveal>
-        <Reveal delay={150} className="relative col-span-5 md:col-span-5 md:col-start-8 aspect-[4/3]">
-          <Image src="/plans/haus-am-hang-schnitt.png" alt="" fill sizes="40vw" className="object-contain" />
+        <Reveal className="relative col-span-5 aspect-[4/3] md:col-span-5 md:col-start-8">
+          <Image src="/plans/haus-am-hang-schnitt.png" alt="" fill sizes="(max-width: 768px) 42vw, 40vw" className="object-contain" />
         </Reveal>
       </section>
 
       {/* Beat Scheu */}
-      <section className="px-5 py-24 md:px-10 md:py-36" aria-labelledby="gruender">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 md:col-span-4">
-            <p className="eyebrow text-stone">Gründer, Geschäftsführung</p>
-            <h2 id="gruender" className="display mt-4 text-[13vw] md:text-[5.6vw]">
-              Beat
-              <br />
-              Scheu
-            </h2>
-            <p className="mt-6 max-w-xs text-[17px] leading-relaxed">
-              Vom Möbelschreiner zum Architekten. Das Wissen um Material und Fügung prägt die Arbeit des Büros bis heute.
-            </p>
-          </div>
-          <ol className="col-span-12 md:col-span-8 mt-10 md:mt-0 border-t border-ink">
-            {timeline.map((t, i) => (
-              <Reveal as="li" key={t.year + t.text} delay={i * 60} className="grid grid-cols-12 gap-4 border-b border-line py-5 md:py-6">
-                <span className="eyebrow col-span-4 md:col-span-3 pt-1.5 text-stone">{t.year}</span>
-                <span className="col-span-8 md:col-span-9 text-[19px] md:text-[clamp(1.1rem,1.6vw,1.6rem)] leading-tight tracking-[-0.015em]">
-                  {t.text}
-                </span>
-              </Reveal>
-            ))}
-          </ol>
+      <section className="wrap grid gap-y-10 py-20 md:grid-cols-12 md:gap-x-8 md:py-32" aria-labelledby="gruender">
+        <div className="md:col-span-4">
+          <h2 id="gruender" className="display text-heading">
+            Beat Scheu
+          </h2>
+          <p className="mt-2 text-stone">Dipl. Architekt FH, Gründer und Geschäftsführer</p>
+          <p className="mt-6 max-w-xs">
+            Vom Möbelschreiner zum Architekten. Das Wissen um Material und Fügung prägt die Arbeit des Büros bis heute.
+          </p>
         </div>
+        <ol className="border-t border-ink md:col-span-8">
+          {timeline.map((t) => (
+            <li key={t.year + t.text} className="grid grid-cols-[6.5rem_1fr] gap-x-4 border-b border-line py-4 md:grid-cols-[9rem_1fr]">
+              <span className="tabular-nums text-stone">{t.year}</span>
+              <span>{t.text}</span>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* Team */}
-      <section id="team" className="bg-treppe px-5 py-24 md:px-10 md:py-36" aria-labelledby="team-titel">
-        <div className="grid grid-cols-12 gap-4 mb-12 md:mb-16">
-          <h2 id="team-titel" className="display col-span-12 md:col-span-6 text-[22vw] md:text-[10vw]">
-            Team
-          </h2>
-          <p className="col-span-12 md:col-span-4 md:col-start-9 self-end text-[17px] leading-snug">
-            Fünf Menschen mit Ausbildungen aus Fachhochschule, Hochschule und Berufslehre, gemeinsam an der Räffelstrasse in
-            Zürich.
-          </p>
-        </div>
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 border-t border-ink">
-          {team.map((m) => (
-            <Reveal as="li" key={m.name} className="border-b border-ink/25 py-7 md:py-9">
-              <p className="eyebrow min-h-[1.4em]">{m.note}</p>
-              <p className="display mt-4 text-[9vw] md:text-[2.5vw]">{m.name}</p>
-              <p className="mt-3 text-[15px]">{m.role}</p>
-            </Reveal>
-          ))}
-        </ul>
-        <div className="mt-14 grid grid-cols-12 gap-4">
-          <h3 className="eyebrow col-span-12 md:col-span-3">Ehemalige</h3>
-          <ul className="col-span-12 md:col-span-9 grid md:grid-cols-3 gap-2 text-[15px]">
-            {alumni.map((a) => (
-              <li key={a}>{a}</li>
+      <section id="team" className="wrap grid gap-y-10 pb-20 md:grid-cols-12 md:gap-x-8 md:pb-32" aria-labelledby="team-titel">
+        <h2 id="team-titel" className="display text-heading md:col-span-4">
+          Team
+        </h2>
+        <div className="md:col-span-8">
+          <ul className="grid border-t border-ink sm:grid-cols-2 sm:gap-x-8">
+            {team.map((m) => (
+              <li key={m.name} className="border-b border-line py-4">
+                <p className="font-medium">{m.name}</p>
+                <p className="text-small text-stone">{m.role}</p>
+              </li>
             ))}
           </ul>
+          <p className="mt-8 text-small text-stone">
+            <span className="font-medium text-ink">Ehemalige:</span> {alumni.join(' · ')}
+          </p>
         </div>
       </section>
 
       {/* Stellen */}
-      <section id="stellen" className="px-5 py-24 md:px-10 md:py-32 border-b border-ink" aria-labelledby="stellen-titel">
-        <div className="grid grid-cols-12 gap-4">
-          <h2 id="stellen-titel" className="eyebrow col-span-12 md:col-span-3 text-stone">
+      <section id="stellen" className="wrap pb-20 md:pb-32" aria-labelledby="stellen-titel">
+        <div className="grid gap-y-3 border-t border-ink pt-6 md:grid-cols-12 md:gap-x-8">
+          <h2 id="stellen-titel" className="font-medium md:col-span-4">
             Stellen
           </h2>
-          <div className="col-span-12 md:col-span-9">
-            <p className="text-[7vw] md:text-[2.9vw] leading-[1.08] tracking-[-0.025em] font-medium [font-variation-settings:'wdth'_92] text-balance">
-              Aktuell sind keine Stellen ausgeschrieben. Spontanbewerbungen nehmen wir gerne per E-Mail entgegen.
-            </p>
-            <a href={`mailto:${contact.email}?subject=Bewerbung`} className="group mt-8 inline-flex items-center gap-3 text-[17px] font-medium">
-              <span className="link-line">{contact.email}</span>
-              <span aria-hidden className="transition-transform group-hover:translate-x-1.5">→</span>
+          <p className="md:col-span-8">
+            Aktuell sind keine Stellen ausgeschrieben. Spontanbewerbungen nehmen wir gerne per E-Mail entgegen:{' '}
+            <a href={`mailto:${contact.email}?subject=Bewerbung`} className="underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
+              {contact.email}
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Nachweise */}
-      <section className="px-5 py-20 md:px-10 md:py-28" aria-labelledby="nachweise">
-        <div className="grid grid-cols-12 gap-x-4 gap-y-10 text-[15px] leading-relaxed">
-          <h2 id="nachweise" className="eyebrow col-span-12 md:col-span-3 text-stone">
-            Bildnachweis
-          </h2>
-          <div className="col-span-12 md:col-span-4">
-            <p className="font-medium">Roman Keller</p>
-            <p className="text-stone">Neubau Haus am Hang, Klosters · Büroumbau Frauenzentrale, Zürich · Umbau Haus Garcia, Meisterschwanden</p>
-          </div>
-          <div className="col-span-12 md:col-span-4 md:col-start-9">
-            <p className="font-medium">Studio Gataric Fotografie</p>
-            <p className="text-stone">Sanierung Haus Im Boden, Klosters-Monbiel</p>
-            <p className="mt-6 font-medium">Vermietung Haus Im Boden</p>
-            <a href="https://www.magnificasa.ch" target="_blank" rel="noopener noreferrer" className="link-line text-stone">
-              Stiftung Ferien im Baudenkmal ↗
-            </a>
-          </div>
+          </p>
         </div>
       </section>
     </>
